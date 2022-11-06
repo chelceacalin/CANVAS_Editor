@@ -103,6 +103,25 @@ let colors = [{
     }
 ];
 
+//Sync Cholors
+let sync_Circles = false;
+let sync_Squares = false;
+
+let sync = [{
+        left: 150,
+        top: 290,
+        width: 45,
+        height: 30,
+        shapeChosen: "circle"
+    }, {
+        left: 152,
+        top: 160,
+        width: 45,
+        height: 30,
+        shapeChosen: "square"
+    }
+
+]
 
 
 let imagineEraser = {
@@ -139,6 +158,49 @@ function drawMenu() {
     context.roundRect(38, 255, 100, 90);
     context.fill();
     context.closePath();
+
+    // Make all Colors Sync SQUARES
+    context.beginPath();
+    context.fillStyle = "rgb(90,90,90)";
+    context.roundRect(150, 290, 45, 30);
+    context.fill();
+    context.closePath();
+    context.fillStyle = "white";
+    context.font = '15px Arial bold';
+    context.fillText('SYNC', 152, 310);
+
+
+    if (sync_Squares === true) {
+        context.fillStyle = "white";
+        context.font = '15px Arial bold';
+        context.fillText('ON', 160, 215);
+    } else {
+        context.fillStyle = "white";
+        context.font = '15px Arial bold';
+        context.fillText('OFF', 160, 215);
+    }
+
+
+
+    // Make all Colors Sync CIRCLES
+    context.beginPath();
+    context.fillStyle = "rgb(90,90,90)";
+    context.roundRect(150, 170, 45, 30);
+    context.fill();
+    context.closePath();
+    context.fillStyle = "white";
+    context.font = '15px Arial bold';
+    context.fillText('SYNC', 152, 190);
+
+    if (sync_Circles === true) {
+        context.fillStyle = "white";
+        context.font = '15px Arial bold';
+        context.fillText('ON', 160, 335);
+    } else {
+        context.fillStyle = "white";
+        context.font = '15px Arial bold';
+        context.fillText('OFF', 160, 335);
+    }
 
     //Pink Circle Drawing
     context.beginPath();
@@ -341,13 +403,24 @@ class Circles {
 
     drawCircles() {
         drawMenu();
-        for (let obj of circles.allCircles) {
-            context.beginPath();
-            context.fillStyle = obj.color;
-            context.arc(obj.marginLeft, obj.marginTop, obj.radius, obj.startAngle, obj.endAngle);
-            context.fill();
-            context.closePath();
+        if (sync_Circles === false) {
+            for (let obj of circles.allCircles) {
+                context.beginPath();
+                context.fillStyle = obj.color;
+                context.arc(obj.marginLeft, obj.marginTop, obj.radius, obj.startAngle, obj.endAngle);
+                context.fill();
+                context.closePath();
+            }
+        } else {
+            for (let obj of circles.allCircles) {
+                context.beginPath();
+                context.fillStyle = ColorToDraw;
+                context.arc(obj.marginLeft, obj.marginTop, obj.radius, obj.startAngle, obj.endAngle);
+                context.fill();
+                context.closePath();
+            }
         }
+
     }
 }
 
@@ -415,10 +488,19 @@ class Shapes {
     drawShapes() {
         context.clearRect(0, 0, width, height); //curat tot
         drawMenu();
-        for (let fig of this.figuri) {
-            context.fillStyle = fig.color;
-            context.fillRect(fig.marginLeft, fig.marginTop, fig.width, fig.height);
+        if (sync_Squares === false) {
+            for (let fig of this.figuri) {
+                context.fillStyle = fig.color;
+                context.fillRect(fig.marginLeft, fig.marginTop, fig.width, fig.height);
+            }
+        } else {
+            context.closePath();
+            for (let fig of this.figuri) {
+                context.fillStyle = ColorToDraw;
+                context.fillRect(fig.marginLeft, fig.marginTop, fig.width, fig.height);
+            }
         }
+
     }
 
 
@@ -523,6 +605,22 @@ canvas.addEventListener('mousedown', (action) => {
         }
     }
 
+    for (let syncItem of sync) {
+        if (posClickedX >= syncItem.left && posClickedX <= syncItem.left + syncItem.width && posClickedY >= syncItem.top && posClickedY <= syncItem.top + syncItem.height) {
+            if (syncItem.shapeChosen === "circle") {
+                sync_Circles = !sync_Circles;
+                shapes.drawShapes();
+                circles.drawCircles();
+            }
+            if (syncItem.shapeChosen === "square") {
+                // console.log("square pressed", sync_Squares);
+                sync_Squares = !sync_Squares;
+                shapes.drawShapes();
+                circles.drawCircles();
+            }
+            drawMenu();
+        }
+    }
 
     //Draw Shape When Clicked on Square
     for (let obj of menuDrawingCoordinatesSquare) {
@@ -536,6 +634,8 @@ canvas.addEventListener('mousedown', (action) => {
 
         }
     }
+
+
     //Draw Shape When Clicked on Circle
     for (let obj of menuDrawingCoordinatesCircle) {
         if (posClickedX >= obj.marginLeft && posClickedX <= obj.marginLeft + obj.width &&
@@ -544,9 +644,12 @@ canvas.addEventListener('mousedown', (action) => {
             circles.drawCircles();
 
         } else {
-            console.log("Mine:", posClickedX, posClickedY, "\n", "Actual:", obj.marginLeft, obj.marginTop);
+            //   console.log("Mine:", posClickedX, posClickedY, "\n", "Actual:", obj.marginLeft, obj.marginTop);
         }
     }
+
+
+
 
     //Apasam pe eraser
     if (posClickedX >= imagineEraser.left + 10 && posClickedX <= imagineEraser.left + 10 + imagineEraser.width - 20 && posClickedY >= imagineEraser.top + 10 && posClickedY <= imagineEraser.top + 10 + imagineEraser.height - 25) {
@@ -562,6 +665,9 @@ canvas.addEventListener('mousedown', (action) => {
         // console.log(imagineEraser.left, imagineEraser.left + imagineEraser.width);
 
     }
+
+
+
 
 });
 
