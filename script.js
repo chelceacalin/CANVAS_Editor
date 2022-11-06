@@ -4,7 +4,7 @@ let context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Global Variables
+// Global Variables -  Most of them are for square
 let width = canvas.width; // Width of canvas
 let height = canvas.height; // Height of canvas
 let mouseMarginLeft; // X coordinate
@@ -15,6 +15,13 @@ let indexSeen; // if it found at least one item in the canvas when clicked
 let index; // get Shape a certain position ( get shape at position )
 let CurrentObject; // the object that I am holding right now with dragging true
 let indexShape; // same thing but for another function
+
+//Global Variables- Cicle
+let index_of_dragging_Shape_Circle;
+let isDragging_Circle = false;
+let indexSeen_Circle;
+let CurrentObject_Circle;
+let indexShape_Circle;
 
 //Arrange Colors In MenuDrawingCoordinates
 let indentare = 5;
@@ -58,6 +65,41 @@ let colors = [{
         width: 30,
         height: 30,
         color: "rgb(238, 130, 238)"
+    },
+    {
+        left: 5 + indentare,
+        top: 765 + indentareVerticala,
+        width: 30,
+        height: 30,
+        color: "black"
+    },
+    {
+        left: 40 + indentare,
+        top: 765 + indentareVerticala,
+        width: 30,
+        height: 30,
+        color: "white"
+    },
+    {
+        left: 75 + indentare,
+        top: 765 + indentareVerticala,
+        width: 30,
+        height: 30,
+        color: "yellow"
+    },
+    {
+        left: 110 + indentare,
+        top: 765 + indentareVerticala,
+        width: 30,
+        height: 30,
+        color: "Chocolate"
+    },
+    {
+        left: 145 + indentare,
+        top: 765 + indentareVerticala,
+        width: 30,
+        height: 30,
+        color: "salmon"
     }
 ];
 
@@ -100,7 +142,7 @@ function drawMenu() {
 
     //Pink Circle Drawing
     context.beginPath();
-    context.fillStyle = "magenta";
+    context.fillStyle = ColorToDraw;
     context.arc(87, 300, 35, 0, 2 * Math.PI);
     context.fill();
     context.closePath();
@@ -114,7 +156,7 @@ function drawMenu() {
 
     //Red Line Drawing
     context.beginPath();
-    context.strokeStyle = "red";
+    context.strokeStyle = ColorToDraw;
     context.lineWidth = 3;
     context.moveTo(50, 390);
     context.lineTo(130, 450);
@@ -169,6 +211,44 @@ function drawMenu() {
     context.fill();
     context.closePath();
 
+
+    //Black Color
+    context.beginPath();
+    context.fillStyle = "rgb(0,0,0)";
+    context.roundRect(5 + indentare, 765 + indentareVerticala, 30, 30);
+    context.fill();
+    context.closePath();
+
+    //White Color
+    context.beginPath();
+    context.fillStyle = "rgb(255,255,255)";
+    context.roundRect(40 + indentare, 765 + indentareVerticala, 30, 30);
+    context.fill();
+    context.closePath();
+
+    //Blue Teal Color
+    context.beginPath();
+    context.fillStyle = "yellow";
+    context.roundRect(75 + indentare, 765 + indentareVerticala, 30, 30);
+    context.fill();
+    context.closePath();
+
+    //Brownish Color
+    context.beginPath();
+    context.fillStyle = "Chocolate";
+    context.roundRect(110 + indentare, 765 + indentareVerticala, 30, 30);
+    context.fill();
+    context.closePath();
+
+    //Salmon Color
+    context.beginPath();
+    context.fillStyle = "Salmon";
+    context.roundRect(145 + indentare, 765 + indentareVerticala, 30, 30);
+    context.fill();
+    context.closePath();
+
+
+
     //Eraser
     //Draw Text for Color Picker
 
@@ -197,8 +277,79 @@ let menuDrawingCoordinatesSquare = [{
     color: "blue"
 }]
 
+let menuDrawingCoordinatesCircle = [{
+    marginLeft: 51,
+    marginTop: 260,
+    width: 70,
+    height: 75,
+    color: "blue"
+}]
+
+class Circle {
+    constructor(marginLeft, marginTop, radius, startAngle, endAngle, color) {
+        this.marginLeft = marginLeft;
+        this.marginTop = marginTop;
+        this.radius = radius;
+        this.startAngle = startAngle;
+        this.endAngle = endAngle;
+        this.color = color;
+    }
+}
+
+class Circles {
+    constructor() {
+        this.circles = [];
+    }
+
+    addCircle(marginLeft, marginTop, radius, startAngle, endAngle, color) {
+        let circ = new Circle(marginLeft, marginTop, radius, startAngle, endAngle, color);
+        this.circles.push(circ);
+    }
 
 
+    get allCircles() {
+        return this.circles;
+
+    }
+
+    removeItemAtPosition(position) {
+        this.circles.splice(position, 1);
+    }
+
+    removeAllShapes() {
+        this.circles = [];
+        circles.addCircle(0, 0, 0, 0, 0, "red");
+    }
+
+    getCircleAtPosition(positition) {
+        index = 0;
+        for (let figura in circles.allCircles) {
+            if (positition === 0) {
+                return figura;
+            } else {
+                index = positition - 1;
+                if (positition > 0) {
+                    index++;
+                    if (index === positition) {
+                        return this.circles[index] != null ? this.circles[index] : new Circle(0, 0, 0, 0, 0, "white");
+                    }
+                }
+            }
+
+        }
+    }
+
+    drawCircles() {
+        drawMenu();
+        for (let obj of circles.allCircles) {
+            context.beginPath();
+            context.fillStyle = obj.color;
+            context.arc(obj.marginLeft, obj.marginTop, obj.radius, obj.startAngle, obj.endAngle);
+            context.fill();
+            context.closePath();
+        }
+    }
+}
 
 
 // Class for a single shape
@@ -227,7 +378,6 @@ class Shapes {
         //console.log(this.figuri);
         //console.log(shapes.shapes[0]);
         this.marginLeft = marginLeft;
-
     }
 
 
@@ -254,7 +404,6 @@ class Shapes {
                 if (positition > 0) {
                     index++;
                     if (index === positition) {
-                        //console.log(index);
                         return this.figuri[index] != null ? this.figuri[index] : new Shape(0, 0, 0, 0, "white");
                     }
                 }
@@ -276,9 +425,14 @@ class Shapes {
 }
 // il folosesc si pt getShapeAtPosition ( hoisting )
 let shapes = new Shapes();
+let circles = new Circles();
+
 shapes.addShape(0, 0, 0, 0, "red"); // keep this hidden ( you can't move it)
+circles.addCircle(0, 0, 0, 0, 0, "red"); // keep this hidden ( you can't move it);
 //Draw the shapes 
 shapes.drawShapes();
+circles.drawCircles();
+
 
 //for (let figura of shapes.allShapes) {
 //   console.log(figura);
@@ -300,6 +454,19 @@ let clicked_on_shape = (clickedX, clickedY, shapes) => {
     }
 }
 
+let clicked_on_shape_circle = (clickedX, clickedY, circle) => {
+    let cornerLeft = circle.marginLeft - circle.radius;
+    let cornerRight = circle.marginLeft + circle.radius;
+    let cornerTop = circle.marginTop - circle.radius;
+    let cornerBottom = circle.marginTop + circle.radius;
+
+    if (clickedX > cornerLeft && clickedX < cornerRight && clickedY > cornerTop && clickedY < cornerBottom) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 //console.log(clicked_on_shape(155, 55, shapes.getShapeAtPosition(1)));
 
 //Event Listeners for the canvas
@@ -308,6 +475,7 @@ canvas.addEventListener('mousedown', (action) => {
     mouseMarginLeft = parseInt(action.x);
     mouseMarginTop = parseInt(action.y);
 
+    //Square
     let indexShape = 0;
     let indexSeen = 0;
     for (let elem of shapes.allShapes) {
@@ -326,7 +494,24 @@ canvas.addEventListener('mousedown', (action) => {
         }
     }
 
-
+    //Circle
+    indexShape_Circle = 0;
+    indexSeen_Circle = 0;
+    for (let elem of circles.allCircles) {
+        if (clicked_on_shape_circle(mouseMarginLeft, mouseMarginTop, elem)) {
+            indexSeenCircle = 1;
+            index_of_dragging_Shape_Circle = indexShape_Circle;
+            isDragging_Circle = true;
+            return;
+        }
+        indexShape_Circle++;
+    }
+    if (indexSeen_Circle === 0) {
+        // for (let elem of circles.allCircles) {
+        //     console.log("My Controls:    ", mouseMarginLeft, mouseMarginTop, "\nActual Controls:\n");
+        //  console.log(elem.marginLeft, elem.marginTop);
+        // }
+    }
 
     //Choose color and let the user draw more shapes
     let posClickedX = action.x;
@@ -337,25 +522,39 @@ canvas.addEventListener('mousedown', (action) => {
             drawMenu();
         }
     }
+
+
     //Draw Shape When Clicked on Square
     for (let obj of menuDrawingCoordinatesSquare) {
         if (posClickedX > obj.marginLeft && posClickedX < obj.marginLeft + obj.width &&
             posClickedY > obj.marginTop && posClickedY < obj.marginTop + obj.height) {
             shapes.addShape(obj.marginLeft + 250, obj.marginTop, obj.width, obj.height, ColorToDraw);
             shapes.drawShapes();
+            circles.drawCircles();
         } else {
             // console.log("Mine:", posClickedX, posClickedY, "\n", "Actual:", obj.marginLeft, obj.marginTop);
 
         }
     }
+    //Draw Shape When Clicked on Circle
+    for (let obj of menuDrawingCoordinatesCircle) {
+        if (posClickedX >= obj.marginLeft && posClickedX <= obj.marginLeft + obj.width &&
+            posClickedY >= obj.marginTop && posClickedY <= obj.marginTop + obj.height) {
+            circles.addCircle(obj.marginLeft + 250, obj.marginTop + 50, 50, 0, 2 * Math.PI, ColorToDraw);
+            circles.drawCircles();
 
-
+        } else {
+            console.log("Mine:", posClickedX, posClickedY, "\n", "Actual:", obj.marginLeft, obj.marginTop);
+        }
+    }
 
     //Apasam pe eraser
     if (posClickedX >= imagineEraser.left + 10 && posClickedX <= imagineEraser.left + 10 + imagineEraser.width - 20 && posClickedY >= imagineEraser.top + 10 && posClickedY <= imagineEraser.top + 10 + imagineEraser.height - 25) {
         console.log("Apasat pe eraser");
         context.clearRect(0, 0, width, height);
         shapes.removeAllShapes();
+        circles.removeAllShapes();
+        ColorToDraw = "white"
         drawMenu();
 
     } else {
@@ -380,7 +579,7 @@ canvas.addEventListener("mousemove", (action) => {
         CurrentObject.marginLeft += deplasareLeft;
         CurrentObject.marginTop += deplasareTop;
         shapes.drawShapes();
-
+        circles.drawCircles();
         //Ajustez Mouse La Noua Pozitie
         mouseMarginLeft = move_mouseMarginLeft;
         mouseMarginTop = move_mouseMarginTop;
@@ -390,7 +589,34 @@ canvas.addEventListener("mousemove", (action) => {
             console.log(shapes.getShapeAtPosition(index_of_dragging_Shape), index_of_dragging_Shape);
             shapes.removeItemAtPosition(index_of_dragging_Shape);
             shapes.drawShapes();
+            circles.drawCircles();
         }
+    } else if (isDragging_Circle) {
+
+        let move_mouseMarginLeft = parseInt(action.x);
+        let move_mouseMarginTop = parseInt(action.y);
+        let deplasareLeft = move_mouseMarginLeft - mouseMarginLeft;
+        let deplasareTop = move_mouseMarginTop - mouseMarginTop;
+        CurrentObject_Circle = circles.getCircleAtPosition(index_of_dragging_Shape_Circle);
+        // console.log(CurrentObject.toString());
+        CurrentObject_Circle.marginLeft += deplasareLeft;
+        CurrentObject_Circle.marginTop += deplasareTop;
+        shapes.drawShapes();
+        circles.drawCircles();
+
+        //Ajustez Mouse La Noua Pozitie
+        mouseMarginLeft = move_mouseMarginLeft;
+        mouseMarginTop = move_mouseMarginTop;
+
+
+        //Daca aduc obiectul in meniu il sterg
+        if (CurrentObject_Circle.marginLeft < menuWidth) {
+            console.log(circles.getCircleAtPosition(index_of_dragging_Shape_Circle), index_of_dragging_Shape_Circle);
+            circles.removeItemAtPosition(index_of_dragging_Shape_Circle);
+            shapes.drawShapes();
+            circles.drawCircles();
+        }
+
     } else return;
 });
 
@@ -398,19 +624,28 @@ canvas.addEventListener("mousemove", (action) => {
 
 canvas.addEventListener("mouseup", (action) => {
     action.preventDefault();
+    //Daca nu facem asta o sa ramana obiectul lipit de mouse
 
     if (isDragging)
         isDragging = false;
     else
+    if (isDragging_Circle)
+        isDragging_Circle = false;
+    else
         return;
+
+
+
 
 });
 
 canvas.addEventListener("mouseout", (action) => {
     action.preventDefault();
-
     if (isDragging)
         isDragging = false;
+    else
+    if (isDragging_Circle)
+        isDragging_Circle = false;
     else
         return;
 
