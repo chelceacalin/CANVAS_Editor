@@ -1,7 +1,7 @@
 # Canvas_Editor
 It's an editor in which the user uses the canvas and selects from a menu objects and places them, with the possibility to drag and drop them around the canvas.
 
-Functions:
+Features:
 <pre>
 -> Erase all the shapes when clicking on the erase button
 -> Erase individual shapes when dragging into the menu side
