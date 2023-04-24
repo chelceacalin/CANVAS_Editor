@@ -1,5 +1,8 @@
 # Canvas_Editor
 It's an editor in which the user uses the canvas and selects from a menu objects and places them, with the possibility to drag and drop them around the canvas.
+Made using vanilla JS and the HTML Canvas element to draw the objects and the menu itself.
+
+![Canvas_Editor](https://user-images.githubusercontent.com/76866499/234027418-25511cae-8707-4ff5-9dc9-28e6443281b8.png)
 
 Features:
 <pre>
